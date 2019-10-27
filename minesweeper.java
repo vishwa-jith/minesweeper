@@ -14,7 +14,7 @@ public class minesweeper extends Applet
 implements ActionListener
 {
 	static char z[][]=new char[100][100];
-    	static int n,m,n1,m1;
+    	static int Number_of_rows,Number_of_columns,number_of_mines,Factor,FontSize;
     	public Button B[][]=new Button[100][100];
     	public static void input()
     	{
@@ -22,46 +22,49 @@ implements ActionListener
     		String name = JOptionPane.showInputDialog(frame, "1) Easy 2) Moderate 3) Difficult");
 		if(name.equals("1"))	//Lvl 1
 		{
-			n=9;	//Number of rows
-			n1=6;	//2*Number of mines
-			m1=9;	//Unlocking factor
-			m=9;	//Number of columns
+			Number_of_rows=9;	//Number of rows
+			Number_of_columns=9;	//Number of columns
+			number_of_mines=10;	//Number of mines
+			FontSize=40;	//FontSize
+			Factor=9;	//Unlocking factor
 		}
 		else if(name.equals("2"))
 		{
-			n=11;	//Number of rows
-			n1=5;	//Mine factor
-			m1=10;	//Unlocking factor
-			m=11;	//Number of columns
+			Number_of_rows=16;	//Number of rows
+			Number_of_columns=16;	//Number of columns
+			number_of_mines=40;	//Number of mines
+			FontSize=35;	//FontSize
+			Factor=10;	//Unlocking factor
 		}
 		else if(name.equals("3"))
 		{
-			n=13;	//Number of rows
-			n1=4;	//Mine factor
-			m1=11;	//Unlocking factor
-			m=13;	//Number of columns
+			Number_of_rows=24;	//Number of rows
+			Number_of_columns=24;	//Number of columns
+			number_of_mines=99;	//Number of mines
+			FontSize=25;	//FontSize
+			Factor=11;	//Unlocking factor
 		}
 		else
 		{
-			System.exit(0);	//Termination condition
+			System.exit(0);	//Termination 
 		}
-		for(int i=0;i<n;i++)
+		for(int i=0;i<Number_of_rows+1;i++)
 		{
-			for(int j=0;j<m;j++)
+			for(int j=0;j<Number_of_columns+1;j++)
 			{
 				z[i][j]='0';	//Initialization
 			}
 		}	
         	Random rand1=new Random();	
-        	for(int i=0;i<(n*m)/n1;i++)	
+        	for(int i=0;i<number_of_mines;i++)	
         	{		
-            		int l= rand1.nextInt(n);	//Random row index
-            		int k= rand1.nextInt(m);	//Random column index
+            		int l= rand1.nextInt(Number_of_rows)+1;	//Random row index
+            		int k= rand1.nextInt(Number_of_columns)+1;	//Random column index
             		z[l][k]='X';	//Setting mines
         	}
-        	for(int i=0;i<n;i++)
+        	for(int i=0;i<Number_of_rows+1;i++)
         	{
-			for(int j=0;j<m;j++)
+			for(int j=0;j<Number_of_columns+1;j++)
             		{
                			try
                			{
@@ -109,13 +112,13 @@ implements ActionListener
     	public void init()
     	{
         	input();	//Setting mines at Random
-		setLayout(new GridLayout(n,m));	//Setting Layout
-		for(int i=0;i<n;i++)
+		setLayout(new GridLayout(Number_of_rows,Number_of_columns));	//Setting GridLayout
+		for(int i=1;i<Number_of_rows+1;i++)
         	{
-			for(int j=0;j<m;j++)
+			for(int j=1;j<Number_of_columns+1;j++)
         		{
 		        	B[i][j]=new Button();	//Creation of button
-		        	add(B[i][j]);	//adding of button
+		        	add(B[i][j]);	//adding button
                 		try
 				{
                 			B[i][j].setBackground(Color.orange);	//Setting up background
@@ -136,13 +139,13 @@ implements ActionListener
     	}
     	public void actionPerformed(ActionEvent e)
     	{
-		Font f=new Font("Monotype Corsiva",Font.BOLD,40);
+		Font f=new Font("Monotype Corsiva",Font.BOLD,FontSize);
 		setFont(f);	//Setting font
 		if(e.getActionCommand().equals("Color.red"))	//There exist a mine
         	{
-            		for(int i=0;i<n;i++)
+            		for(int i=1;i<Number_of_rows+1;i++)
             		{
-                		for(int j=0;j<m;j++)
+                		for(int j=1;j<Number_of_columns+1;j++)
                 		{
                     			if(B[i][j].getActionCommand().equals("Color.red"))	//Finding all existing mines
                     			{
@@ -153,10 +156,10 @@ implements ActionListener
         	}
         	else if(e.getActionCommand().equals("0"))	//There exist no mines
         	{
-	    		int i,j,x=n/m1,k,l;
-            		for(i=0;i<n;i++)
+	    		int x=Number_of_rows/Factor;
+            		for(int i=1;i<Number_of_rows+1;i++)
             		{
-                		for(j=0;j<m;j++)
+                		for(int j=1;j<Number_of_columns+1;j++)
                 		{
 					if(B[i][j]==e.getSource()) 	//Getting source button
 					{
@@ -165,20 +168,20 @@ implements ActionListener
 						int c,d;
 						c=i-x;
 						d=j-x;
-						if(c<0)
-							c=0;
-						if(d<0)
-							d=0;
+						if(c<1)
+							c=1;
+						if(d<1)
+							d=1;
 						int u,v;
 						u=i+x;
 						v=j+x;
-						if(u>n)
-							u=n-1;
-						if(v>m)
-							v=m-1;
-						for(k=0;k<n;k++)
+						if(u>Number_of_rows)
+							u=Number_of_rows;
+						if(v>Number_of_columns)
+							v=Number_of_columns;
+						for(int k=1;k<Number_of_rows+1;k++)
 	    					{
-							for(l=0;l<m;l++)
+							for(int l=1;l<Number_of_columns+1;l++)
 							{
 								if(k>=c && k<=u && l>=d && l<=v)	//Setting the range of elements to exist
 								{
@@ -201,9 +204,9 @@ implements ActionListener
 		}
 	     	else	//There exist a adjacent mine
 	        {
-	     		for(int i=0;i<n;i++)
+	     		for(int i=1;i<Number_of_rows+1;i++)
 	            	{
-	                	for(int j=0;j<m;j++)
+	                	for(int j=1;j<Number_of_columns+1;j++)
 	                	{
 	                    		if(e.getSource()==B[i][j])
         	            		{
